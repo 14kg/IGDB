@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/playlist.css">
+    <title></title>
+  </head>
+  <body id = "page">
+    <div id ="filter"></div>
+    <div class = "header">
+      <!--Header image here-->
+      <img src="images/IGDB.png" height="75" width="200">
+      <div id ="links">
+        <a href ="/"> Home</a> 
+        <a href ="/database"> Database</a> 
+        <a href="/login">Sign In/Register</a>
+                <a href="/about">About</a>
+
+        <form method="GET" action="search">
+          <input type="search" name="query" placeholder="Search Game Titles or Users.."><br>
+          <button type="submit" value="Search">Search</button>
+          <select name="search_select">
+                            <option value="user">Users</option>
+                            <option value="game">Games</option>
+                        </select>
+        </form>
+     </div>
+    </div>
+      
+    </div>
+    <div class="page">
+      <div class="playground"> 
+          <a id = "return" href = "/user_page">Return</a>
+      </div>
+      <div class="playsholder">
+      <h1>Playlist</h1>
+      Description
+      </div>
+      <div class="playarea">
+      
+      </div>
+      <div class="playbutton"> 
+        <button id="addnew">Add Game</button>
+      </div>
+
+      <div id="makenew" class="modal">
+      
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class = "forms">
+            <div class ="form_title"><h1>Add new Game</h1></div>
+            <form class = "form_form" id = "form_form" method="POST" action="playlist_add">
+            <select name="game">
+                            <option value="user">Game 1</option>
+                            <option value="game">Game 2</option>
+                            <option value="game">Game 3</option>
+                        </select><br>
+            <button id = "submit">Submit</button>
+          </form>
+          <br>
+        </div>
+      
+      </div>
+    </div> 
+
+   
+  
+  <script src = "js/playlist.js"></script>
+  </body>
+</html>

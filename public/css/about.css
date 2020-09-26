@@ -1,0 +1,207 @@
+* {
+  box-sizing: border-box;
+}
+@font-face{
+  font-family: 'Gravity';
+  src: url("fonts/Gravity-Book.otf") format("truetype");
+}
+@font-face{
+  font-family: 'VCR';
+  src: url("fonts/VCR_OSD.ttf") format("truetype");
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.header {
+  background-color:whitesmoke;
+  height:12%;
+  border-bottom:solid black;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: rebeccapurple;
+
+}
+.header a{
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 20px;
+  font-family: 'VCR', Fallback, sans-serif;
+  color:white;
+  float: center;
+}
+.header button,form,#search
+{
+  font-family: 'VCR', Fallback, sans-serif;
+}
+
+.header a:hover
+{
+  color: greenyellow;
+}
+
+.header img{
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#links
+{
+  grid-area: 1/5 ;
+}
+
+
+#page{
+  background-color: black;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 87%
+}
+
+.main-art{
+ grid-area: 2 / 3 / 8 / 8;
+  border: dotted white;
+  color:white;
+  height: 100%;
+}
+.main-modules{
+  grid-area: 2 / 3 / 8 / 8;
+   border: dotted white;
+   color:white;
+   height: 100%;
+ }
+ .main-information{
+  grid-area: 2 / 3 / 8 / 8;
+   border: dotted white;
+   color:white;
+   height: 100%;
+ }
+
+ 
+#button-art{
+   grid-area: 2 / 2 / 3 / 3;
+   border-left: dotted white  ;
+   border-top: dotted white  ;
+   border-bottom: dotted white  ;
+}
+#button-art button{
+  font-family: 'VCR', Fallback, sans-serif;
+
+  background-color: black;
+  border: black;
+  color:white;
+}
+
+#button-modules{
+  font-family: 'VCR', Fallback, sans-serif;
+
+  grid-area: 3 / 2 / 4 / 3;;
+  border-left: dotted white;
+  border-bottom: dotted white ;
+}
+#button-modules button{
+ background-color: black;
+ border: black;
+ color:white;
+}
+
+#button-information{
+  grid-area: 4 / 2 / 5 / 3; 
+  border-left: dotted white;
+  border-bottom: dotted white;
+  
+}
+#button-information button{
+  font-family: 'VCR', Fallback, sans-serif;
+
+ background-color: black;
+ border: black;
+ color:white;
+}
+
+
+#art-container{
+  color: white;
+  display: none ;
+}
+#modules-container{
+  color: white;
+  display: none ;
+}
+#information-container{
+  color: white;
+  display: none ;
+}
+
+.page button{
+  outline:none;
+  font-family: 'VCR', Fallback, sans-serif;
+
+}
+
+
+
+.art-class{
+  color: white;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: solid 3px rgba(255,255,255,0);
+  margin: 10px;
+  font-family: 'VCR', Fallback, sans-serif;
+
+}
+
+
+
+
+/* Animation */
+/* There is a more efficient way of implementing this*/
+.anim-typewriter1 {
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+}
+.anim-typewriter2 {
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 2s;
+}
+.anim-typewriter3{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 3s;
+}
+.anim-typewriter4{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 4s;
+}
+.anim-typewriter5{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 5s;
+}
+.anim-typewriter6{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 6s;
+}
+.anim-typewriter7{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 7s;
+}
+.anim-typewriter8{
+  animation: typewriter 4s steps(60) 1s 1 normal both;
+  animation-delay: 8s;
+}
+
+@keyframes typewriter{
+  from{
+    width: 0;
+  }
+  to{width: 100%;
+  }
+}
+

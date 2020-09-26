@@ -1,0 +1,169 @@
+/*CSS unique to user_page.html*/
+@font-face{
+  font-family: 'Gravity';
+  src: url("fonts/Gravity-Book.otf") format("truetype");
+}
+@font-face{
+  font-family: 'VCR';
+  src: url("fonts/VCR_OSD.ttf") format("truetype");
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+
+  }
+  .page
+  {
+    background-color: rebeccapurple;
+    display: grid;
+    padding-top: 1em;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows:repeat(6, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    width: auto;
+    height: 88vh;
+    
+  }
+  .header {
+    background-color:whitesmoke;
+    height:fit-content;
+    border-bottom:solid black;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background-color: rebeccapurple;
+    padding-bottom: 10px;
+    height:12%;
+
+  }
+  .header a{
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 20px;
+    font-family: 'VCR', Fallback, sans-serif;
+    color:white;
+    float: center;
+  }
+  .header button,form 
+  {
+    font-family: 'VCR', Fallback, sans-serif;
+  }
+  
+  .header img{
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  .header a:hover
+  {
+    color: greenyellow;
+  }
+
+  #links
+  {
+    grid-area: 1/5;
+  }
+ 
+#body {
+  background-color: #E7DFDF;
+     grid-area: 1 / 1 / 5 / 4;
+     padding: 20px;
+     
+}
+ 
+#body p{
+  font-family: 'Gravity', Fallback, sans-serif;
+
+ 
+}
+#footer {
+  background-color: #E7DFDF;
+    grid-area: 5/ 1 / 7 / 4;
+    padding: 20px;
+}
+
+#footer h3{
+  font-family: 'VCR', Fallback, sans-serif;
+}
+
+#playlists {
+  background-color: #E7DFDF;
+     grid-area: 1/ 4 / 4 / 6;
+     padding: 20px;
+}
+#playlists h3{
+  font-family: 'VCR', Fallback, sans-serif;
+}
+
+#comments {
+  padding: 20px;
+  background-color: #E7DFDF;
+    grid-area: 4 / 4 / 7 / 6;
+}
+#comments h3 {
+  font-family: 'VCR', Fallback, sans-serif;
+
+}
+
+/*Modal*/
+
+#addnew {
+  margin-left: 3em;
+  margin-top: 3em;
+}
+.modal {
+  display: none; 
+  position: fixed;
+  grid-area: 3 / 2 / 10 / 10;
+  z-index: 2; 
+  width: 70%;
+  height: 70%;
+  left: 50%;
+  top: 50%;
+  border: solid black;
+  transform: translate(-50%, -50%);
+  overflow: auto; /* Enable scroll if needed */
+  background-color:whitesmoke;
+  border-radius: 10px;
+}
+
+.close {
+  margin-right:28px ;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+  #filter{
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3); /* Black background with opacity */
+   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover*/
+    display: none;
+  }
+
+
+  .forms
+  {
+    margin-top: 3em;
+    margin-left: 3em;
+  }
+  .forms input
+  {
+    width: 70%;
+  }
