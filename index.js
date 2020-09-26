@@ -47,17 +47,6 @@ app.use(session({
     store: new MongoStore({ mongooseConnection: db })
 }));
 
-let user = new User({
-    username: "zezima",
-    password: "abcd1234"
-})
-
-user.save().then((doc)=>{//add async
-    console.log("Successfully added: " + doc)
-}, (err)=>{
-    console.log("Error in adding: "+ err)
-})
-
 //RETRIEVE ONE
 // Game.findOne({
 //     _id: "5f56ebbba57a9f2b5c599c48"
@@ -252,11 +241,36 @@ app.get("/logout", urlencoder, (req,res)=>{
 
 app.post("/register", urlencoder, (req,res)=>{
     //register as a user
-    let username = req.body.username //check if unique
-    let password = req.body.password
-    let email = req.body.email
-    let birthday = req.body.birthday
-    let address = req.body.address
+    if(req.body.username && req.body.password && req.body.email){
+        let username = req.body.username //check if unique
+        let password = req.body.password
+        let email = req.body.email
+        
+        let user = new User({
+            username: username,
+            password: password,
+            email: email
+        })
+        
+        //check existing
+        User.findOne({
+            username: username
+        }).then((doc)=>{
+            if(!doc){
+                user.save().then((doc)=>{//add async
+                    console.log("===USER REGISTERED===")
+                }, (err)=>{
+                    console.log("Error: "+ err)
+                })
+            }else{
+                console.log("===USERNAME TAKEN===")
+            }
+        }, (err)=>{
+            console.log(err)
+        })
+    }else{
+        console.log("===MISSING FIELDS===")
+    }
 
     res.render("user_page.hbs", {})
 })
