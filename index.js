@@ -13,7 +13,7 @@ const {Playlist} = require("./models/playlist.js")
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
-    extended:false
+    extended:true
 })
 
 mongoose.connect("mongodb://127.0.0.1:27017/games", {
@@ -42,7 +42,7 @@ app.use(session({
     saveUninitialized: false,
     cookie:{
         httpOnly: true,
-        secure: true,
+        secure: false,
         maxAge: 1000*60*60
     },
     store: new MongoStore({ mongooseConnection: db })
@@ -94,7 +94,15 @@ app.use(express.static(__dirname + '/public'));
 
 app.get("/", urlencoder, (req,res)=>{
     //access the main page
-    res.render("home.hbs", {})
+    console.log(req.session)
+    if(req.session){
+        let username  = req.session.username
+        console.log(username)
+        res.render("home.hbs", {username: username})
+    }else{
+        res.render("home.hbs", {})
+    }
+    
 })
 
 app.get("/database", urlencoder, (req,res)=>{
@@ -187,13 +195,21 @@ app.post("/review", urlencoder, (req,res)=>{
 //===================
 app.post("/playlist", urlencoder, (req,res)=>{
     //create a playlist
+    console.log(req.session.user_id)
 
     if(req.body.title && req.body.private && req.session.user_id && req.body.description){
         let title = req.body.title
-        let private = req.body.private
+        let private = false
+        if(req.body.private = "True"){
+            private = true
+        }else{
+            private = false
+        }
         let user_id = req.session.user_id
         let description = req.body.description
         
+        console.log("boolin "+private)
+
         let playlist = new Playlist({
             title: title,
             private: private,
@@ -201,24 +217,27 @@ app.post("/playlist", urlencoder, (req,res)=>{
             description: description
         })
         
-        //check existing
+        //push new playlist to the array
         User.findOne({
-            username: username
+            _id: user_id
         }).then((doc)=>{
-            if(!doc){
-                user.save().then((doc)=>{//add async
-                    console.log("===USER REGISTERED===")
-                }, (err)=>{
-                    console.log("Error: "+ err)
-                })
+            if(doc.playlists){
+                console.log("Playlist? "+doc.playlists)
+                doc.playlists.push(playlist)
+                doc.save()
+                playlist.save()
+                console.log("===PLAYLIST ADDED===")
             }else{
-                console.log("===USERNAME TAKEN===")
+                doc.playlists[0] = playlist
+                doc.save()
+                playlists.save()
+                console.log("===FIRST PLAYLIST ADDED===")
             }
         }, (err)=>{
             console.log(err)
         })
     }else{
-        console.log("===MISSING FIELDS===")
+        console.log("===MISSING PLAYLIST FIELDS===")
     }
     res.render("playlist.hbs", {})
 })
@@ -268,6 +287,7 @@ app.post("/login", urlencoder, (req,res)=>{
 app.get("/logout", urlencoder, (req,res)=>{
     //delete session
     req.session.destroy(function() {
+        req.session = null
         console.log("===SIGNED OUT===")
         res.redirect("/");
     });
