@@ -8,6 +8,7 @@ const MongoStore = require('connect-mongo')(session)
 
 const {Game} = require("./models/game.js")
 const {User} = require("./models/user.js")
+const {Playlist} = require("./models/playlist.js")
 
 const app = express()
 
@@ -181,25 +182,57 @@ app.post("/review", urlencoder, (req,res)=>{
     res.render("review.hbs", {})
 })
 
+//===================
+//PLAYLIST OPERATIONS
+//===================
 app.post("/playlist", urlencoder, (req,res)=>{
     //create a playlist
-    let title = req.body.title
-    let private = req.body.private
-    let user_id = req.body.user_id
-    let description = req.body.description
 
+    if(req.body.title && req.body.private && req.session.user_id && req.body.description){
+        let title = req.body.title
+        let private = req.body.private
+        let user_id = req.session.user_id
+        let description = req.body.description
+        
+        let playlist = new Playlist({
+            title: title,
+            private: private,
+            user_id: user_id,
+            description: description
+        })
+        
+        //check existing
+        User.findOne({
+            username: username
+        }).then((doc)=>{
+            if(!doc){
+                user.save().then((doc)=>{//add async
+                    console.log("===USER REGISTERED===")
+                }, (err)=>{
+                    console.log("Error: "+ err)
+                })
+            }else{
+                console.log("===USERNAME TAKEN===")
+            }
+        }, (err)=>{
+            console.log(err)
+        })
+    }else{
+        console.log("===MISSING FIELDS===")
+    }
     res.render("playlist.hbs", {})
 })
 
 app.post("/playlist_add", urlencoder, (req,res)=>{
-    //create a playlist
+    //add game to playlist
     let game = req.body.game
 
     res.render("playlist.hbs", {})
 })
 
+//=============================
 //USER LOGGING AND REGISTRATION
-
+//=============================
 app.post("/login", urlencoder, (req,res)=>{
     //user log in
     let username = req.body.username
@@ -214,6 +247,7 @@ app.post("/login", urlencoder, (req,res)=>{
             //check if password matches
             if(doc.password === password){
                 req.session.username = username
+                req.session.user_id = doc._id
                 req.session.loggedin = true
                 console.log("===SIGNED IN===")
                 res.render("home.hbs", {username: username})
