@@ -4,6 +4,7 @@ const cookieparser = require("cookie-parser")
 const hbs = require("hbs")
 const bodyparser = require("body-parser")
 const mongoose = require("mongoose")
+const crypto = require("crypto")
 const MongoStore = require('connect-mongo')(session)
 
 const {Game} = require("./models/game.js")
@@ -623,7 +624,9 @@ app.post("/playlist_edit", urlencoder, (req,res)=>{
 app.post("/login", urlencoder, (req,res)=>{
     //user log in
     let username = req.body.username
-    let password = req.body.password
+    let mykey = crypto.createCipher('aes-128-cbc', 'mcdonalds')
+    let password = mykey.update(String(req.body.password), 'utf8', 'hex')
+    password += mykey.final('hex')
 
     //search database for username match
     User.findOne({
@@ -632,6 +635,7 @@ app.post("/login", urlencoder, (req,res)=>{
         if(doc){
             console.log(JSON.stringify(doc))
             //check if password matches
+
             if(doc.password === password){
                 req.session.username = username
                 req.session.user_id = doc._id
@@ -668,9 +672,12 @@ app.post("/register", urlencoder, (req,res)=>{
     //register as a user
     if(req.body.username && req.body.password && req.body.email){
         let username = req.body.username //check if unique
-        let password = req.body.password
         let email = req.body.email
         
+        let mykey = crypto.createCipher('aes-128-cbc', 'mcdonalds')
+        let password = mykey.update(String(req.body.password), 'utf8', 'hex')
+        password += mykey.final('hex')
+
         let user = new User({
             username: username,
             password: password,
