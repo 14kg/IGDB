@@ -471,11 +471,13 @@ app.post("/playlist", urlencoder, (req,res)=>{
                 doc.playlists.push(playlist)
                 doc.save()
                 playlist.save()
+                res.redirect("/user_page?uid="+req.session.user_id)
                 console.log("===PLAYLIST ADDED===")
             }else{
                 doc.playlists[0] = playlist
                 doc.save()
                 playlist.save()
+                res.redirect("/user_page?uid="+req.session.user_id)
                 console.log("===FIRST PLAYLIST ADDED===")
             }
         }, (err)=>{
@@ -484,7 +486,6 @@ app.post("/playlist", urlencoder, (req,res)=>{
     }else{
         console.log("===MISSING PLAYLIST FIELDS===")
     }
-    res.render("playlist.hbs", {})
 })
 
 app.post("/playlist_add", urlencoder, (req,res)=>{
@@ -513,6 +514,7 @@ app.post("/playlist_add", urlencoder, (req,res)=>{
                 console.log("Games? "+doc.games)
                 doc.games.push(game)
                 doc.save()
+                res.redirect("/playlist?id="+req.query.pid)
                 console.log("===GAME ADDED===")
             }else{
                 doc.games[0] = game
@@ -525,7 +527,6 @@ app.post("/playlist_add", urlencoder, (req,res)=>{
     }, (err)=>{
         console.log(err)
     })
-    res.render("playlist.hbs", {})
 })
 
 app.post("/playlist_edit", urlencoder, (req,res)=>{
