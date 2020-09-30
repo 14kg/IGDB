@@ -130,14 +130,12 @@ body{
   color: white;
   background-color: rebeccapurple;
   padding: 7px;
-  border-radius: 10px;
   margin: 10px;
-  height: 200px;
-  min-height:199px ;
+  min-width:200px;
+  min-height:320px ;
   font-family: 'Gravity', Fallback, sans-serif; 
   font-size: 1.3vh;
   border: solid rgba(0,0,0,0.8); ;
-
 }
 
 .gamecard a{color: white;}
@@ -164,7 +162,6 @@ body{
 ::-webkit-scrollbar-thumb {
   background: #d16fd8;
   border: 0px none #ffffff;
-  border-radius: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #b670d7;
@@ -175,7 +172,6 @@ body{
 ::-webkit-scrollbar-track {
   background: #ffffff;
   border: 0px none #ffffff;
-  border-radius: 50px;
 }
 ::-webkit-scrollbar-track:hover {
   background: #eee2e2;
@@ -187,3 +183,68 @@ body{
   background: transparent;
 }
 
+/*Modal*/
+
+#addnew {
+  
+}
+.modal {
+  display: none; 
+  position: fixed;
+  grid-area: 3 / 2 / 10 / 10;
+  z-index: 2; 
+  width: 40%;
+  height: 40%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: auto; /* Enable scroll if needed */
+  background-color:whitesmoke;
+  border: solid rgba(0,0,0,0.8); ;
+}
+
+.close {
+  margin-right:28px ;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close_edit {
+  margin-right:28px ;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+  #filter{
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    background-color: rgba(0,0,0,0.3); /* Black background with opacity */
+   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover*/
+    display: none;
+  }
+
+
+  .forms
+  {
+    margin-top: 3em;
+    margin-left: 3em;
+  }
+  .forms input
+  {
+    width: 70%;
+  }

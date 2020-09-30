@@ -19,10 +19,11 @@ const reviewSchema = new mongoose.Schema({
 
 const gameSchema = new mongoose.Schema({
     title: String,
+    art: [String], //array of links to images
     genre: String,
     publisher: String,
     developer: String,
-    year: Number,
+    year: String,
     description: String,
     reviews: [reviewSchema]
 })

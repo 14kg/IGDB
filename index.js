@@ -107,6 +107,7 @@ app.get("/", urlencoder, (req,res)=>{
 
 app.get("/database", urlencoder, (req,res)=>{
     //access the database page
+    //load all games
     res.render("database.hbs", {})
 })
 
@@ -143,13 +144,13 @@ app.get("/game", urlencoder, (req,res)=>{
 
 app.get("/user_page", urlencoder, (req,res)=>{
     //view a user
-
+    //if viewed user is not the same as logged in, hide options
     res.render("user_page.hbs", {})
 })
 
 app.get("/playlist", urlencoder, (req,res)=>{
     //view a playlist
-
+    //if viewed playlist does not belong to logged in user, hide options
     res.render("playlist.hbs", {})
 })
 
@@ -159,18 +160,68 @@ app.get("/review", urlencoder, (req,res)=>{
     res.render("review.hbs", {})
 })
 
-app.post("/game", urlencoder, (req,res)=>{
+//========================
+//ADD NEW GAME(ADMIN ONLY)
+//========================
+app.post("/database", urlencoder, (req,res)=>{
     //create a game
-    let title = req.body.title
-    let genre = req.body.genre
-    let publisher = req.body.publisher
-    let developer = req.body.developer
-    let year = req.body.year
-    let description = req.body.description
 
-    res.render("game.hbs", {})
+    if(req.body.title && req.body.genre && req.body.publisher && req.body.developer && req.body.year){
+        let title = req.body.title
+        if(req.body.art){
+            let art = req.body.art
+        }
+        let genre = req.body.genre
+        let publisher = req.body.publisher
+        let developer = req.body.developer
+        let year = req.body.year
+        let description = req.body.description
+        
+        let game = new Game({
+            title: title,
+            genre: genre,
+            publisher: publisher,
+            developer: developer,
+            year: year,
+            description: description
+        })
+        
+        //check existing
+        Game.findOne({
+            title: title
+        }).then((doc)=>{
+            if(!doc){
+                game.save().then((doc)=>{//add async
+                    console.log("===GAME ADDED===")
+                }, (err)=>{
+                    console.log("Error: "+ err)
+                })
+            }else{
+                console.log("===EXISTING TITLE===")
+            }
+        }, (err)=>{
+            console.log(err)
+        })
+    }else{
+        console.log("===MISSING FIELDS===")
+    }
+    res.render("database.hbs", {})
 })
 
+app.post("/db_edit", urlencoder, (req,res)=>{
+    //edit game from database
+
+    res.render("database.hbs", {})
+})
+
+app.post("/db_delete", urlencoder, (req,res)=>{
+    //delete game from database
+
+    res.render("database.hbs", {})
+})
+//====================
+//COMMENTS AND REVIEWS
+//====================
 app.post("/comment", urlencoder, (req,res)=>{
     //create a comment
     let comment = req.body.comment
