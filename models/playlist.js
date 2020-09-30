@@ -5,7 +5,7 @@ const gameSchema = new mongoose.Schema({
     genre: String,
     publisher: String,
     developer: String,
-    year: Number,
+    year: String,
     description: String
 })
 

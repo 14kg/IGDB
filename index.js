@@ -111,7 +111,7 @@ app.get("/database", urlencoder, (req,res)=>{
     //load all games
     console.log("admin? "+req.session.admin)
     Game.find({}).then((docs)=>{
-        res.render("database.hbs", {docs:docs, admin:req.session.admin, username:req.session.username})
+        res.render("database.hbs", {docs:docs, admin:req.session.admin, username:req.session.username, uid:req.session.user_id})
     }, (err)=>{
         console.log(err)
     })
@@ -125,7 +125,7 @@ app.get("/search", urlencoder, (req,res)=>{
             username: req.query.query
         }).then((doc)=>{
             if(doc){
-                res.redirect("/user?id="+doc._id);
+                res.redirect("/user_page?uid="+doc._id);
             }else{
                 console.log("===NO USER FOUND===")
                 res.redirect("/user_page");
@@ -171,20 +171,7 @@ app.get("/user_page", urlencoder, (req,res)=>{
     //view own user page
     //if viewed user is not the same as logged in, hide options
     User.findOne({
-        _id: req.session.user_id
-    }).then((doc)=>{
-        // console.log(JSON.stringify(doc))
-        res.render("user_page.hbs", {username: doc.username, playlists: doc.playlists})
-    }, (err)=>{
-        console.log(err)
-    })
-})
-
-app.get("/user", urlencoder, (req,res)=>{
-    //view a user
-    //if viewed user is not the same as logged in, hide options
-    User.findOne({
-        _id: req.query.id
+        _id: req.query.uid
     }).then((doc)=>{
         // console.log(JSON.stringify(doc))
         res.render("user_page.hbs", {username: doc.username, playlists: doc.playlists})
@@ -196,7 +183,28 @@ app.get("/user", urlencoder, (req,res)=>{
 app.get("/playlist", urlencoder, (req,res)=>{
     //view a playlist
     //if viewed playlist does not belong to logged in user, hide options
-    res.render("playlist.hbs", {})
+    //check if already added
+    let games =[]    
+    let _id = req.query.id
+    let owned = 0
+    Game.find({}).then((docs)=>{
+        for(let i = 0; i < docs.length; i++){
+            games[i]=docs[i]
+        }
+        Playlist.findOne({
+            _id: _id
+        }).then((doc)=>{
+            if(doc.user_id == req.session.user_id){
+                owned = 1
+            }
+            console.log(doc.games)
+            res.render("playlist.hbs", {games:games, pid:doc._id,title:doc.title, description: doc.description, pgames: doc.games,owned: owned})
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 app.get("/review", urlencoder, (req,res)=>{
@@ -393,7 +401,7 @@ app.post("/playlist", urlencoder, (req,res)=>{
             }else{
                 doc.playlists[0] = playlist
                 doc.save()
-                playlists.save()
+                playlist.save()
                 console.log("===FIRST PLAYLIST ADDED===")
             }
         }, (err)=>{
@@ -407,8 +415,42 @@ app.post("/playlist", urlencoder, (req,res)=>{
 
 app.post("/playlist_add", urlencoder, (req,res)=>{
     //add game to playlist
-    let game = req.body.game
+    let game_id = req.body.game
 
+    let game = new Game()
+
+    Game.findOne({
+        _id: game_id
+    }).then((doc)=>{
+        game = {
+            title:doc.title,
+            // art: doc., 
+            genre: doc.genre,
+            publisher: doc.publisher,
+            developer: doc.developer,
+            year: doc.year,
+            description: doc.description
+        }
+        Playlist.findOne({
+            _id: req.query.pid
+        }).then((doc)=>{
+            console.log(req.query.pid)
+            if(doc.games){
+                console.log("Games? "+doc.games)
+                doc.games.push(game)
+                doc.save()
+                console.log("===GAME ADDED===")
+            }else{
+                doc.games[0] = game
+                doc.save()
+                console.log("===FIRST GAME ADDED===")
+            }
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
     res.render("playlist.hbs", {})
 })
 

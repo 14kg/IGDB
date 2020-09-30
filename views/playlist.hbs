@@ -33,14 +33,18 @@
           <a id = "return" href = "/user_page">Return</a>
       </div>
       <div class="playsholder">
-      <h1>Playlist</h1>
-      Description
+      <h1>{{title}}</h1>
+      {{description}}
       </div>
       <div class="playarea">
-      
+      {{#each pgames}}
+        {{title}}
+      {{/each}}
       </div>
       <div class="playbutton"> 
-        <button id="addnew">Add Game</button>
+        {{#if owned}}
+          <button id="addnew">Add Game</button>
+        {{/if}}
       </div>
 
       <div id="makenew" class="modal">
@@ -49,13 +53,13 @@
         <div class="modal-content">
           <span class="close">&times;</span>
           <div class = "forms">
-            <div class ="form_title"><h1>Add new Game</h1></div>
-            <form class = "form_form" id = "form_form" method="POST" action="playlist_add">
+            <div class ="form_title"><h1>Add a game to playlist</h1></div>
+            <form class = "form_form" id = "form_form" method="POST" action="/playlist_add?pid={{pid}}">
             <select name="game">
-                            <option value="user">Game 1</option>
-                            <option value="game">Game 2</option>
-                            <option value="game">Game 3</option>
-                        </select><br>
+              {{#each games}}
+                    <option value="{{_id}}">{{title}}</option>
+              {{/each}}
+            </select><br>
             <button id = "submit">Submit</button>
           </form>
           <br>
