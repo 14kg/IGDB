@@ -172,7 +172,25 @@ app.get("/about", urlencoder, (req,res)=>{
 
 app.get("/game", urlencoder, (req,res)=>{
     //view a game
-    res.render("game.hbs", {})
+    Game.findOne({
+        _id: req.query.gid
+    }).then((doc)=>{
+        res.render("game.hbs", {
+            title:doc.title,
+            // art: doc., 
+            genre: doc.genre,
+            publisher: doc.publisher,
+            developer: doc.developer,
+            year: doc.year,
+            description: doc.description,
+            admin:req.session.admin, 
+            susername:req.session.username, 
+            uid:req.session.user_id,
+            gid:req.query.gid
+        })
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 app.get("/user_page", urlencoder, (req,res)=>{
@@ -378,7 +396,7 @@ app.post("/comment", urlencoder, (req,res)=>{
 app.post("/review", urlencoder, (req,res)=>{
     //create a review
     let title = req.body.title
-    let game_id = req.query.gid
+    let game_id = req.body.gid
     let user_id = req.session.user_id
     let username = req.session.username
     let rating = req.body.rating
@@ -398,22 +416,23 @@ app.post("/review", urlencoder, (req,res)=>{
     User.findOne({
         _id: user_id
     }).then((doc)=>{
-        if(doc.reviews){
-            console.log("review? "+doc.reviews)
             doc.reviews.push(new_review)
             doc.save()
-            new_review.save()
-            console.log("===REVIEW ADDED===")
-        }else{
-            doc.reviews[0] = new_review
-            doc.save()
-            new_review.save()
-            console.log("===FIRST REVIEW ADDED===")
-        }
+            Game.findOne({
+                _id: game_id
+            }).then((doc)=>{
+                console.log(doc)
+                doc.reviews.push(new_review)
+                doc.save()
+                new_review.save()
+                console.log("===REVIEW ADDED===")
+                res.render("review.hbs", {})
+            }, (err)=>{
+                console.log(err)
+            })
     }, (err)=>{
         console.log(err)
     })
-    res.render("review.hbs", {})
 })
 
 //===================
