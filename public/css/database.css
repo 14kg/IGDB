@@ -173,6 +173,9 @@ body{
 .edit_btn {
   font-family: 'VCR', Fallback, sans-serif;
 }
+.del_btn {
+  font-family: 'VCR', Fallback, sans-serif;
+}
 #addnew {
   font-family: 'VCR', Fallback, sans-serif;
 }
@@ -207,9 +210,28 @@ body{
   font-weight: bold;
 }
 
+.close_del {
+  margin-right:28px ;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
 .close:hover,
 .close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+.close_edit:hover,
+.close_edit:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+.close_del:hover,
+.close_del:focus {
   color: red;
   text-decoration: none;
   cursor: pointer;

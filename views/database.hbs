@@ -106,8 +106,12 @@
     <p></p>
   </div> --}}
   {{#if admin}}
-    <button id="addnew" class="nes-btn">Add New</button>
-    <button class="edit_btn nes-btn" >Edit</button>
+  <center>
+      <h3>Admin Options</h3>
+      <button id="addnew" class="nes-btn is-success">Add New</button>
+      <button class="edit_btn nes-btn is-warning" >Edit</button>
+      <button class="del_btn nes-btn is-error" >Delete</button>
+  </center>
   {{/if}}
   <div id = "insertion_point" class="nes-container is-rounded">
     {{#each docs}}
@@ -180,6 +184,26 @@
                 <p style="margin: 5px 0 0 0">Description</p>
                 <textarea name="edit_description" rows="4" cols="43"></textarea>
                 <br><button id = "submit">Submit</button>
+              </form>
+              <br>
+            </div>
+          </div>
+        </div> 
+      </div>
+      <div id="delete" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close_del">&times;</span>
+          <div class = "forms">
+            <div class ="form_title"><h3>Delete Game</h3></div>
+              <form class = "form_form" id = "form_form" method="POST" action="db_delete">
+                <p style="margin: 5px 0 0 0">Select Game to Delete</p>
+                <select name="delete_id">
+                  {{#each docs}}
+                    <option value="{{_id}}">{{title}}</option>
+                  {{/each}}
+                </select>
+                <br><button id = "submit">Delete</button>
               </form>
               <br>
             </div>

@@ -109,17 +109,13 @@ app.get("/", urlencoder, (req,res)=>{
 app.get("/database", urlencoder, (req,res)=>{
     //access the database page
     //load all games
-    let admin = 0;
-    let username  = req.session.username
-    if(username === "zezima"){
-        admin = 1
-    }
+    console.log(req.session.admin)
     Game.find({}).then((docs)=>{
         // for(let i = 0; i < docs.length; i++){
         //     console.log(JSON.stringify(docs[i]))
         // }
         // console.log(JSON.stringify(docs))
-        res.render("database.hbs", {docs:docs, admin:admin, username:username})
+        res.render("database.hbs", {docs:docs, admin:req.session.admin, username:req.session.username})
     }, (err)=>{
         console.log(err)
     })
@@ -291,8 +287,14 @@ app.post("/db_edit", urlencoder, (req,res)=>{
 
 app.post("/db_delete", urlencoder, (req,res)=>{
     //delete game from database
-
-    res.render("database.hbs", {})
+    Game.deleteOne({
+        _id: req.body.delete_id
+    }).then((doc)=>{
+        console.log("Deleted " + doc.n + " document/s.")
+        res.redirect("/database");
+    }, (err)=>{
+        console.log(err)
+    })
 })
 //====================
 //COMMENTS AND REVIEWS
@@ -394,6 +396,9 @@ app.post("/login", urlencoder, (req,res)=>{
                 req.session.username = username
                 req.session.user_id = doc._id
                 req.session.loggedin = true
+                if(username === "admin"){
+                    req.session.admin = true
+                }
                 console.log("===SIGNED IN===")
                 res.render("home.hbs", {username: username})
             }else{
