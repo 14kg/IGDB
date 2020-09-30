@@ -108,7 +108,19 @@ app.get("/", urlencoder, (req,res)=>{
 app.get("/database", urlencoder, (req,res)=>{
     //access the database page
     //load all games
-    res.render("database.hbs", {})
+    let admin = 0;
+    if(req.session.username === "zezima"){
+        admin = 1
+    }
+    Game.find({}).then((docs)=>{
+        for(let i = 0; i < docs.length; i++){
+            console.log(JSON.stringify(docs[i]))
+        }
+        console.log(JSON.stringify(docs))
+        res.render("database.hbs", {docs:docs, admin:admin})
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 
@@ -205,7 +217,7 @@ app.post("/database", urlencoder, (req,res)=>{
     }else{
         console.log("===MISSING FIELDS===")
     }
-    res.render("database.hbs", {})
+    res.redirect("/database");
 })
 
 app.post("/db_edit", urlencoder, (req,res)=>{
@@ -377,7 +389,7 @@ app.post("/register", urlencoder, (req,res)=>{
         console.log("===MISSING FIELDS===")
     }
 
-    res.render("user_page.hbs", {})
+    res.redirect("/login");
 })
 
 app.post("/forgotpassword", urlencoder, (req,res)=>{
