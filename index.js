@@ -18,7 +18,8 @@ const urlencoder = bodyparser.urlencoded({
 
 mongoose.connect("mongodb://127.0.0.1:27017/games", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => console.log('Connected to MongoDB...')).catch((err) => console.error("Coudn't connect MongoDB....", err));
 
 const db = mongoose.connection
@@ -109,15 +110,16 @@ app.get("/database", urlencoder, (req,res)=>{
     //access the database page
     //load all games
     let admin = 0;
-    if(req.session.username === "zezima"){
+    let username  = req.session.username
+    if(username === "zezima"){
         admin = 1
     }
     Game.find({}).then((docs)=>{
-        for(let i = 0; i < docs.length; i++){
-            console.log(JSON.stringify(docs[i]))
-        }
-        console.log(JSON.stringify(docs))
-        res.render("database.hbs", {docs:docs, admin:admin})
+        // for(let i = 0; i < docs.length; i++){
+        //     console.log(JSON.stringify(docs[i]))
+        // }
+        // console.log(JSON.stringify(docs))
+        res.render("database.hbs", {docs:docs, admin:admin, username:username})
     }, (err)=>{
         console.log(err)
     })
@@ -221,9 +223,70 @@ app.post("/database", urlencoder, (req,res)=>{
 })
 
 app.post("/db_edit", urlencoder, (req,res)=>{
+    let _id = req.body.edit_id
+    let title = req.body.edit_title
+    if(req.body.edit_art){
+        let art = req.body.edit_art
+    }
+    let genre = req.body.edit_genre
+    let publisher = req.body.edit_publisher
+    let developer = req.body.edit_developer
+    let year = req.body.edit_year
+    let description = req.body.edit_description
     //edit game from database
-
-    res.render("database.hbs", {})
+    Game.findOne({
+        _id: _id
+    }).then((doc)=>{
+        if(doc){
+            console.log("1 "+title)
+            console.log("2 "+doc)
+            if(title == ""){
+                title = doc.title
+                console.log("3 "+title)
+            }
+            // if(art === ""){
+            //     art = doc.art
+            // }
+            if(genre == ""){
+                genre = doc.genre
+            }
+            if(publisher == ""){
+                publisher = doc.publisher
+            }
+            if(developer == ""){
+                developer = doc.developer
+            }
+            if(year == ""){
+                year = doc.year
+            }
+            if(description == ""){
+                description = doc.description
+            }
+        }else{
+            console.log("===GAME NOT FOUND===")
+        }
+        
+        Game.findOneAndUpdate({
+            _id:_id
+        },{
+            title:title,
+            genre:genre,
+            // art:art,
+            publisher:publisher,
+            developer:developer,
+            year:year,
+            description:description
+        },{
+            new: true
+        }).then((doc)=>{
+            console.log("Updated " +JSON.stringify(doc))
+            res.redirect("/database");
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 app.post("/db_delete", urlencoder, (req,res)=>{

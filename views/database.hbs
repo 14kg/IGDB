@@ -16,7 +16,11 @@
     <div id ="links">
         <a class="nes-btn" href ="/"> Home</a> 
         <a class="nes-btn" href ="/database"> Database</a> 
-        <a class="nes-btn" href="/login">Sign In/Register</a>
+        {{#if username}}
+          <a class="nes-btn" href="/logout">Sign out {{username}}</a>
+        {{else}}        
+          <a class="nes-btn" href="/login">Sign In/Register</a>
+        {{/if}}
         <a class="nes-btn" href="/about">About</a>
     </div>
     <div id="sitesearch">
@@ -103,6 +107,7 @@
   </div> --}}
   {{#if admin}}
     <button id="addnew" class="nes-btn">Add New</button>
+    <button class="edit_btn nes-btn" >Edit</button>
   {{/if}}
   <div id = "insertion_point" class="nes-container is-rounded">
     {{#each docs}}
@@ -114,13 +119,10 @@
           <b>Developer:</b> <p id ="game_dev">{{developer}}</p>
           <b>Date Released:</b> <p id ="game_date">{{year}}</p>
 
-          {{#if admin}}
+          {{!-- {{#if admin}}
             <button type="submit" formaction="/db_delete" class="nes-btn">Delete</button>
-          {{/if}}
+          {{/if}} --}}
         </form>
-        {{#if admin}}
-          <button class="edit_btn nes-btn" >Edit</button>
-        {{/if}}
       </div>
     {{/each}}
       
@@ -159,18 +161,24 @@
           <div class = "forms">
             <div class ="form_title"><h3>Edit Game</h3></div>
               <form class = "form_form" id = "form_form" method="POST" action="db_edit">
+                <p style="margin: 5px 0 0 0">Select Game to Edit</p>
+                <select name="edit_id">
+                  {{#each docs}}
+                    <option value="{{_id}}">{{title}}</option>
+                  {{/each}}
+                </select>
                 <p style="margin: 5px 0 0 0">Title</p>
-                <input type = "text" id = "play_title" placeholder = "Title" name="title">
+                <input type = "text" id = "play_title" placeholder = "Title" name="edit_title">
                 <p style="margin: 5px 0 0 0">Genre</p>
-                <input type = "text" id = "play_title" placeholder = "Genre" name="genre">
+                <input type = "text" id = "play_title" placeholder = "Genre" name="edit_genre">
                 <p style="margin: 5px 0 0 0">Publisher</p>
-                <input type = "text" id = "play_title" placeholder = "Publisher" name="publisher">
+                <input type = "text" id = "play_title" placeholder = "Publisher" name="edit_publisher">
                 <p style="margin: 5px 0 0 0">Developer</p>
-                <input type = "text" id = "play_title" placeholder = "Developer" name="developer">
+                <input type = "text" id = "play_title" placeholder = "Developer" name="edit_developer">
                 <p style="margin: 5px 0 0 0">Date Released</p>
-                <input type = "date" id = "play_title" placeholder = "2020" name="year">
+                <input type = "date" id = "play_title" placeholder = "2020" name="edit_year">
                 <p style="margin: 5px 0 0 0">Description</p>
-                <textarea name="description" rows="4" cols="43"></textarea>
+                <textarea name="edit_description" rows="4" cols="43"></textarea>
                 <br><button id = "submit">Submit</button>
               </form>
               <br>
