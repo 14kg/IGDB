@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongo')(session)
 const {Game} = require("./models/game.js")
 const {User} = require("./models/user.js")
 const {Playlist} = require("./models/playlist.js")
+const {Review} = require("./models/review.js")
 
 const app = express()
 
@@ -377,11 +378,41 @@ app.post("/comment", urlencoder, (req,res)=>{
 app.post("/review", urlencoder, (req,res)=>{
     //create a review
     let title = req.body.title
-    let game_id = req.body.game_id
-    let user_id = req.body.user_id
+    let game_id = req.query.gid
+    let user_id = req.session.user_id
+    let username = req.session.username
     let rating = req.body.rating
     let review = req.body.review
 
+    let new_review = new Review({
+        title: title,
+        game_id: game_id,
+        user: {
+            _id: user_id,
+            username:username
+        },
+        rating: rating,
+        review: review
+    })
+
+    User.findOne({
+        _id: user_id
+    }).then((doc)=>{
+        if(doc.reviews){
+            console.log("review? "+doc.reviews)
+            doc.reviews.push(new_review)
+            doc.save()
+            new_review.save()
+            console.log("===REVIEW ADDED===")
+        }else{
+            doc.reviews[0] = new_review
+            doc.save()
+            new_review.save()
+            console.log("===FIRST REVIEW ADDED===")
+        }
+    }, (err)=>{
+        console.log(err)
+    })
     res.render("review.hbs", {})
 })
 

@@ -7,7 +7,6 @@ const commentSchema = new mongoose.Schema({
 })
 
 const reviewSchema = new mongoose.Schema({
-    _id: String,
     title: String,
     user: {
             _id: String, 
