@@ -5,7 +5,7 @@
       <link rel="stylesheet" type="text/css" href="css/game.css">
      <link rel="stylesheet" type="text/css" href="css/nes.css/css/nes.css">
 
-    <title id = "igdb_title">IGDB - </title>
+    <title id = "igdb_title">IGDB - {{title}}</title>
   </head>
   <body>
 <div class = "header">
@@ -62,6 +62,7 @@
         <div id = "gamedesc" class = "nes-container is-rounded">
           {{description}}
         </div>
+        
         <div id = "commenter" class = "nes-container is-rounded">
             <h3>Write a review for this game.</h3>
             <form class = "form_form" id = "form_form" method="POST" action="/review">
@@ -72,15 +73,24 @@
                   <input type = "number" min="0" max="100" value="100" name="rating">
                   <p style="margin: 5px 0 0 0">Review</p>
                   <textarea name="review" rows="4" cols="96" placeholder="This game is great!"></textarea>
-                  <br><button id = "submit">Submit</button>
+                  {{#if susername}}
+                  <br><button class="nes-btn" id = "submit">Submit</button>
+                  {{else}}
+                  <a class="nes-btn" href="/login">Sign In to Review</a>
+                  {{/if}}
             </form>
         </div>
       </div>
-
+       
       <div id = "reviews" class = "nes-container is-rounded">
-          <h3>Latest Reviews</h3><br>
-          <a href="/review">Great game. Would recommend.</a>
+          <table>
+            <tr><th><h3>Reviews</h3></th></tr>
+            {{#each reviews}}
+            <tr><td><a href="/review?id={{_id}}">{{title}}</a></td></tr>
+            {{/each}}
+          </table>
       </div>
+      
 
       
     </div>

@@ -47,7 +47,18 @@
                 <h3>Welcome to {{username}}'s User Page</h3>
             </div>
             <div class = "panel nes-container is-rounded">
-                <h3>Recent Reviews</h3>
+                <table>
+                  <tr>
+                    <th><h3>Reviews</h3></th>
+                    <th><h3>Comments</h3></th>
+                  </tr>
+                {{#each reviews}}
+                  <tr>
+                    <td><a href="/review?id={{_id}}">{{title}}</a></td>
+                    <td>{{comments.length}}</td>
+                  </tr>
+                {{/each}}
+                </table>
             </div>
             <div class = "panel nes-container is-rounded">
               <div id = "playlist_s">
@@ -92,8 +103,15 @@
       </div> 
             </div>
             <div class = "panel nes-container is-rounded">
-              <h3>Recent Comments</h3>
+              <h3>Comments</h3>
               <div id = "comment_s">
+                {{#each comments}}
+                  <tr>
+                    <td><a href="/review?id={{review_id}}">{{comment}}</a></td>
+                    <td>{{description}}</td>
+                  </tr>
+                {{/each}}
+                </table>
               </div>
             </div>
         </div>

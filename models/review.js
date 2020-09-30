@@ -3,7 +3,11 @@ const mongoose = require("mongoose")
 const commentSchema = new mongoose.Schema({
     _id: String,
     comment: String,
-    review_id: String
+    review_id: String,
+    user: {
+        _id: String, 
+        username: String
+    },
 })
 
 const reviewSchema = new mongoose.Schema({

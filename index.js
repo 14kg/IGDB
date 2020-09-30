@@ -10,6 +10,7 @@ const {Game} = require("./models/game.js")
 const {User} = require("./models/user.js")
 const {Playlist} = require("./models/playlist.js")
 const {Review} = require("./models/review.js")
+const {Comment} = require("./models/comment.js")
 
 const app = express()
 
@@ -172,6 +173,7 @@ app.get("/about", urlencoder, (req,res)=>{
 
 app.get("/game", urlencoder, (req,res)=>{
     //view a game
+    console.log(req.query.gid)
     Game.findOne({
         _id: req.query.gid
     }).then((doc)=>{
@@ -182,6 +184,7 @@ app.get("/game", urlencoder, (req,res)=>{
             publisher: doc.publisher,
             developer: doc.developer,
             year: doc.year,
+            reviews: doc.reviews,
             description: doc.description,
             admin:req.session.admin, 
             susername:req.session.username, 
@@ -209,6 +212,8 @@ app.get("/user_page", urlencoder, (req,res)=>{
             uid:req.session.user_id, 
             username: doc.username, 
             playlists: doc.playlists,
+            reviews: doc.reviews,
+            comments: doc.comments,
             owned: owned
         })
     }, (err)=>{
@@ -240,7 +245,10 @@ app.get("/playlist", urlencoder, (req,res)=>{
                 title:doc.title, 
                 description: doc.description, 
                 pgames: doc.games,
-                owned: owned
+                owned: owned,
+                susername:req.session.username, 
+                uid:req.session.user_id,
+                gid:req.query.gid
             })
         }, (err)=>{
             console.log(err)
@@ -252,8 +260,49 @@ app.get("/playlist", urlencoder, (req,res)=>{
 
 app.get("/review", urlencoder, (req,res)=>{
     //view a review
+    let _id
+    let title
+    let user
+    let rating
+    let review
+    let comments
 
-    res.render("review.hbs", {})
+    Review.findOne({
+        _id: req.query.id
+    }).then((doc)=>{
+        _id=doc.id
+        title=doc.title
+        user={
+            _id:doc.user._id,
+            username:doc.user.username
+        }
+        rating= doc.rating
+        review= doc.review
+        comments= doc.comments
+
+
+        Game.findOne({
+            _id: doc.game_id
+        }).then((doc)=>{
+            res.render("review.hbs", {
+                rid:_id,
+                title: title,
+                user: user,
+                rating: rating,
+                review: review,
+                comments: comments,
+                game_title: doc.title,
+                susername:req.session.username, 
+                uid:req.session.user_id,
+                gid:req.query.gid
+            })
+        }, (err)=>{
+            console.log(err)
+        })
+        
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 //========================
@@ -388,9 +437,40 @@ app.post("/db_delete", urlencoder, (req,res)=>{
 app.post("/comment", urlencoder, (req,res)=>{
     //create a comment
     let comment = req.body.comment
-    let user_id = req.body.user_id
+    let user_id = req.body.uid
+    let username = req.body.username
+    let review_id = req.body.rid
 
-    res.render("review.hbs", {})
+    let new_comment = new Comment({
+        comment: comment,
+        review_id: review_id,
+        user: {
+            _id: user_id,
+            username:username
+        },
+    })
+
+    User.findOne({
+        _id: user_id
+    }).then((doc)=>{
+        console.log("USER " + doc.username)
+        doc.comments.push(new_comment)
+        doc.save()
+        Review.findOne({
+            _id: review_id
+        }).then((doc)=>{
+            console.log("Commented on "+doc.title)
+            doc.comments.push(new_comment)
+            doc.save()
+            new_comment.save()
+            console.log("===COMMENT ADDED===")
+            res.render("review.hbs", {})
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 app.post("/review", urlencoder, (req,res)=>{
@@ -498,6 +578,7 @@ app.post("/playlist_add", urlencoder, (req,res)=>{
         _id: game_id
     }).then((doc)=>{
         game = {
+            _id: doc._id,
             title:doc.title,
             // art: doc., 
             genre: doc.genre,
