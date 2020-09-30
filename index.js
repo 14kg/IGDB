@@ -111,7 +111,7 @@ app.get("/database", urlencoder, (req,res)=>{
     //load all games
     console.log("admin? "+req.session.admin)
     Game.find({}).then((docs)=>{
-        res.render("database.hbs", {docs:docs, admin:req.session.admin, username:req.session.username, uid:req.session.user_id})
+        res.render("database.hbs", {docs:docs, admin:req.session.admin, susername:req.session.username, uid:req.session.user_id})
     }, (err)=>{
         console.log(err)
     })
@@ -174,7 +174,7 @@ app.get("/user_page", urlencoder, (req,res)=>{
         _id: req.query.uid
     }).then((doc)=>{
         // console.log(JSON.stringify(doc))
-        res.render("user_page.hbs", {username: doc.username, playlists: doc.playlists})
+        res.render("user_page.hbs", {susername: req.session.username, uid:req.session.user_id, username: doc.username, playlists: doc.playlists})
     }, (err)=>{
         console.log(err)
     })
