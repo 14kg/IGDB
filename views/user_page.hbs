@@ -64,8 +64,9 @@
                 {{/each}}
                 </table>
               </div>
-        <button id="addnew" class="nes-btn">New Playlist</button>
-
+        {{#if owned}}
+          <button id="addnew" class="nes-btn">New Playlist</button>
+        {{/if}}
         <div id="makenew" class="modal">
           <!-- Modal content -->
           <div class="modal-content">

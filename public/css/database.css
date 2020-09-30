@@ -23,7 +23,7 @@ html
 #links select{ width:fit-content}
 body{
     margin: 0;
-    padding: 0;
+    padding: 0; 
     background-size: cover;
     background-position: center;
     height: 100%;

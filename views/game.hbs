@@ -8,32 +8,44 @@
     <title id = "igdb_title">IGDB - </title>
   </head>
   <body>
-    <div class = "header">
-      <!--Header image here-->
-      <img src="images/IGDB.png" height="75" width="200">
-      <div id ="links"> 
-        <a href ="/"> Home</a> 
-        <a href ="/database"> Database</a> 
-        <a href="/login">Sign In/Register</a>
-        <a href="/about">About</a>
-
-        <form method="GET" action="search">
-          <input type="search" name="query" placeholder="Search Game Titles or Users.."><br>
-          <button type="submit" value="Search">Search</button>
-          <select name="search_select">
-                            <option value="user">Users</option>
-                            <option value="game">Games</option>
-                        </select>
-        </form>
-     </div>
+<div class = "header">
+    <!--Header image here-->
+    <div id="header_logo" class="nes-container is-rounded is-dark" style="background-color: rebeccapurple !important">
+      <center>
+        <span id="banner_title">INTERNET GAMES DATABASE</span>
+      </center>
     </div>
+    <div id ="links">
+        <a class="nes-btn" href ="/"> Home</a> 
+        <a class="nes-btn" href ="/database"> Database</a> 
+        {{#if susername}}
+          <a class="nes-btn" href="/user_page?uid={{uid}}">User Page</a>
+          <a class="nes-btn" href="/logout">Sign out {{susername}}</a>
+        {{else}}        
+          <a class="nes-btn" href="/login">Sign In/Register</a>
+        {{/if}}
+        <a class="nes-btn" href="/about">About</a>
+    </div>
+    <div id="sitesearch">
+      <form method="GET" action="search" id = "search">
+          <button type="submit" value="Search" class="nes-btn" style="float:left">Search</button>
+          <div class="nes-select siteselect">
+            <select name="search_select">
+              <option value="user">Users</option>
+              <option value="game">Games</option>
+            </select>
+          </div>
+          <div class="nes-field is-inline"  >
+              <input style="margin-left:8px !important" type="search" name="query" placeholder="Search Game Titles or Users.." class="nes-input">
+          </div>
+      </form>
+    </div>
+</div>
 <!--Container for things below-->
-    <div id = "page" class = "nes-container is-rounded">
-   
-
-
+    <div id = "page">
       <div id = "gametitle" class = "nes-container is-rounded">
-        <h3><!--{{title}}--> Game title here</h3>
+        <h3><!--{{title}}--> Game title here</h3><br>
+        <progress class="nes-progress is-primary" value="90" max="100"></progress>
       </div>
 
       <div id = "gamepic" class = "nes-container is-rounded">
@@ -41,40 +53,46 @@
       </div>
 
       <div id = "gamefacts" class = "nes-container is-rounded">
-         <b><p>Publisher:</p></b><span id = "publisher"><!--{{publisher}}-->Default Game </span>
-         <b><p>Developer:</p></b><span id = "developer"><!--{{developer}}-->BethEAsoft</span>
-         <b><p>Year Published:</p></b><span id = "year_published"><!--{{year}}-->Default Game </span>
-         <b><p>Genre/s: </p></b><span id = "genres"><!--{{genre}}--> Action</span>
+         <b>Publisher:</b><br>
+         <b>Developer:</b><br>
+         <b>Date Published:</b><br>
+         <b>Genre:</b><br>
       </div>
-
-      <div id = "gamedesc" class = "nes-container is-rounded">
-        <!--{{description}}-->
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce pulvinar vel quam sed porttitor. Donec sodales eget est quis eleifend. Vestibulum lacinia suscipit molestie. In nec accumsan orci. In sodales ipsum in consequat consectetur. Curabitur fringilla nulla quis 
-        convallis sagittis. Cras porta dolor ut consequat posuere. Morbi ut eleifend libero. Mauris ut dolor in arcu luctus semper eget id magna.
-        Nam turpis purus, pellentesque fringilla pretium in, tincidunt sit amet massa. Sed vestibulum leo a malesuada commodo. Morbi tincidunt 
-        urna quis risus dictum fermentum. Cras vel dignissim urna. Praesent hendrerit placerat laoreet. Nulla imperdiet nulla at eros condimentum
-        tincidunt. Cras quam elit, viverra elementum dolor vel, ullamcorper consectetur elit. Morbi vel turpis ut sem laoreet imperdiet non in elit.
-        Vestibulum vulputate eget risus id sollicitudin. Nullam non tortor et quam pharetra tristique ut nec nunc. Fusce vitae ullamcorper arcu, nec
-        iaculis tellus. Aliquam a pretium ipsum, vel euismod leo. Sed egestas ex sit amet suscipit vehicula. Donec lectus tellus, dignissim sed leo et, 
-        feugiat aliquam turpis. Aenean imperdiet tincidunt elementum. Integer vitae finibus augue. Praesent fermentum turpis nunc. Integer ultricies lacus
-        at aliquet aliquam. Curabitur tempus nibh ut est mollis, non tincidunt velit blandit. Vivamus at libero pellentesque mi aliquet sollicitudin. Mauris
-        ex enim, cursus non mollis ut, egestas eget leo. Sed viverra risus libero, et accumsan velit rhoncus vitae. Aenean nunc nisi, semper vel scelerisque at,
-        imperdiet a nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras quis sem augue. Curabitur rutrum lorem lorem.
-      </div>
-
-      <div id = "commenter" class = "nes-container is-rounded">
-      <span><input type="text"></span> <span>Rating:<input type="number"></span>  
-      <textarea rows="2" cols="90"></textarea>
-      <button>S</button>
+      <div class="cont">
+        <div id = "gamedesc" class = "nes-container is-rounded">
+          <!--{{description}}-->
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce pulvinar vel quam sed porttitor. Donec sodales eget est quis eleifend. Vestibulum lacinia suscipit molestie. In nec accumsan orci. In sodales ipsum in consequat consectetur. Curabitur fringilla nulla quis 
+          convallis sagittis. Cras porta dolor ut consequat posuere. Morbi ut eleifend libero. Mauris ut dolor in arcu luctus semper eget id magna.
+          Nam turpis purus, pellentesque fringilla pretium in, tincidunt sit amet massa. Sed vestibulum leo a malesuada commodo. Morbi tincidunt 
+          urna quis risus dictum fermentum. Cras vel dignissim urna. Praesent hendrerit placerat laoreet. Nulla imperdiet nulla at eros condimentum
+          tincidunt. Cras quam elit, viverra elementum dolor vel, ullamcorper consectetur elit. Morbi vel turpis ut sem laoreet imperdiet non in elit.
+          Vestibulum vulputate eget risus id sollicitudin. Nullam non tortor et quam pharetra tristique ut nec nunc. Fusce vitae ullamcorper arcu, nec
+          iaculis tellus. Aliquam a pretium ipsum, vel euismod leo. Sed egestas ex sit amet suscipit vehicula. Donec lectus tellus, dignissim sed leo et, 
+          feugiat aliquam turpis. Aenean imperdiet tincidunt elementum. Integer vitae finibus augue. Praesent fermentum turpis nunc. Integer ultricies lacus
+          at aliquet aliquam. Curabitur tempus nibh ut est mollis, non tincidunt velit blandit. Vivamus at libero pellentesque mi aliquet sollicitudin. Mauris
+          ex enim, cursus non mollis ut, egestas eget leo. Sed viverra risus libero, et accumsan velit rhoncus vitae. Aenean nunc nisi, semper vel scelerisque at,
+          imperdiet a nisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras quis sem augue. Curabitur rutrum lorem lorem.
+        </div>
+        <div id = "commenter" class = "nes-container is-rounded">
+            <h3>Write a review for this game.</h3>
+            <form class = "form_form" id = "form_form" method="POST" action="/review">
+                  <span style="margin: 5px 0 0 0">Title</span>
+                  <input type = "text" placeholder = "Title" name="title">
+                  <span style="margin: 5px 0 0 0">Rating</span>
+                  <input type = "number" min="0" max="100" value="100" name="rating">
+                  <p style="margin: 5px 0 0 0">Review</p>
+                  <textarea name="description" rows="4" cols="96" placeholder="This game is great!"></textarea>
+                  <br><button id = "submit">Submit</button>
+            </form>
+        </div>
       </div>
 
       <div id = "reviews" class = "nes-container is-rounded">
-      <div id = "latest_comments">
-        <h3>Latest Reviews</h3><br>
-        <a href="/review">Great game. Would recommend.</a>
+          <h3>Latest Reviews</h3><br>
+          <a href="/review">Great game. Would recommend.</a>
       </div>
 
-      </div>
+      
     </div>
   </body>
 </html>

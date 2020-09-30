@@ -97,9 +97,11 @@ app.get("/", urlencoder, (req,res)=>{
     //access the main page
     console.log(req.session)
     if(req.session){
-        let username  = req.session.username
-        console.log(username)
-        res.render("home.hbs", {username: username})
+        res.render("home.hbs", {
+            admin:req.session.admin, 
+            susername:req.session.username, 
+            uid:req.session.user_id
+        })
     }else{
         res.render("home.hbs", {})
     }
@@ -111,7 +113,12 @@ app.get("/database", urlencoder, (req,res)=>{
     //load all games
     console.log("admin? "+req.session.admin)
     Game.find({}).then((docs)=>{
-        res.render("database.hbs", {docs:docs, admin:req.session.admin, susername:req.session.username, uid:req.session.user_id})
+        res.render("database.hbs", {
+            docs:docs, 
+            admin:req.session.admin, 
+            susername:req.session.username, 
+            uid:req.session.user_id
+        })
     }, (err)=>{
         console.log(err)
     })
@@ -170,11 +177,21 @@ app.get("/game", urlencoder, (req,res)=>{
 app.get("/user_page", urlencoder, (req,res)=>{
     //view own user page
     //if viewed user is not the same as logged in, hide options
+    let owned = 0
     User.findOne({
         _id: req.query.uid
     }).then((doc)=>{
         // console.log(JSON.stringify(doc))
-        res.render("user_page.hbs", {susername: req.session.username, uid:req.session.user_id, username: doc.username, playlists: doc.playlists})
+        if(doc._id == req.session.user_id){
+            owned = 1
+        }
+        res.render("user_page.hbs", {
+            susername: req.session.username, 
+            uid:req.session.user_id, 
+            username: doc.username, 
+            playlists: doc.playlists,
+            owned: owned
+        })
     }, (err)=>{
         console.log(err)
     })
@@ -198,7 +215,14 @@ app.get("/playlist", urlencoder, (req,res)=>{
                 owned = 1
             }
             console.log(doc.games)
-            res.render("playlist.hbs", {games:games, pid:doc._id,title:doc.title, description: doc.description, pgames: doc.games,owned: owned})
+            res.render("playlist.hbs", {
+                games:games, 
+                pid:doc._id,
+                title:doc.title, 
+                description: doc.description, 
+                pgames: doc.games,
+                owned: owned
+            })
         }, (err)=>{
             console.log(err)
         })
@@ -484,7 +508,7 @@ app.post("/login", urlencoder, (req,res)=>{
                     req.session.admin = true
                 }
                 console.log("===SIGNED IN===")
-                res.render("home.hbs", {username: username})
+                res.redirect("/");
             }else{
                 console.log("===WRONG PASSWORD===")
                 let error = "Wrong password."

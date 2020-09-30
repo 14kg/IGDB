@@ -53,7 +53,7 @@
     {{#each docs}}
       <div class = "gamecard">
         <form method="POST">
-          <a href="/game"><h3 id="game_title">{{title}}</h3></a>
+          <a href="/game?id={{_id}}"><h3 id="game_title">{{title}}</h3></a>
           <b>Genre:</b> <p id = "game_genre">{{genre}}</p>
           <b>Publisher:</b> <p id ="game_dev">{{publisher}}</p>
           <b>Developer:</b> <p id ="game_dev">{{developer}}</p>
