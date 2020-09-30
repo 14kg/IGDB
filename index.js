@@ -109,12 +109,8 @@ app.get("/", urlencoder, (req,res)=>{
 app.get("/database", urlencoder, (req,res)=>{
     //access the database page
     //load all games
-    console.log(req.session.admin)
+    console.log("admin? "+req.session.admin)
     Game.find({}).then((docs)=>{
-        // for(let i = 0; i < docs.length; i++){
-        //     console.log(JSON.stringify(docs[i]))
-        // }
-        // console.log(JSON.stringify(docs))
         res.render("database.hbs", {docs:docs, admin:req.session.admin, username:req.session.username})
     }, (err)=>{
         console.log(err)
@@ -125,13 +121,32 @@ app.get("/database", urlencoder, (req,res)=>{
 app.get("/search", urlencoder, (req,res)=>{
     //access the database page
     if(req.query.search_select=="user"){
-        //go to user page if exact match
-        //optional: display closest match
-        res.render("user_page.hbs", {})
+        User.findOne({
+            username: req.query.query
+        }).then((doc)=>{
+            if(doc){
+                res.redirect("/user?id="+doc._id);
+            }else{
+                console.log("===NO USER FOUND===")
+                res.redirect("/user_page");
+            }
+            
+        }, (err)=>{
+            console.log(err)
+        })
     }else if(req.query.search_select=="game"){
-        //go to game page if exact match
-        //optional: display closest match
-        res.render("game.hbs", {})
+        Game.findOne({
+            title: req.query.query
+        }).then((doc)=>{
+            if(doc){
+                res.redirect("/game?id="+doc._id);
+            }else{
+                console.log("===NO GAME FOUND===")
+                res.redirect("/game");
+            }
+        }, (err)=>{
+            console.log(err)
+        })
     }
 })
 
@@ -153,9 +168,29 @@ app.get("/game", urlencoder, (req,res)=>{
 })
 
 app.get("/user_page", urlencoder, (req,res)=>{
+    //view own user page
+    //if viewed user is not the same as logged in, hide options
+    User.findOne({
+        _id: req.session.user_id
+    }).then((doc)=>{
+        // console.log(JSON.stringify(doc))
+        res.render("user_page.hbs", {username: doc.username, playlists: doc.playlists})
+    }, (err)=>{
+        console.log(err)
+    })
+})
+
+app.get("/user", urlencoder, (req,res)=>{
     //view a user
     //if viewed user is not the same as logged in, hide options
-    res.render("user_page.hbs", {})
+    User.findOne({
+        _id: req.query.id
+    }).then((doc)=>{
+        // console.log(JSON.stringify(doc))
+        res.render("user_page.hbs", {username: doc.username, playlists: doc.playlists})
+    }, (err)=>{
+        console.log(err)
+    })
 })
 
 app.get("/playlist", urlencoder, (req,res)=>{
@@ -371,6 +406,13 @@ app.post("/playlist", urlencoder, (req,res)=>{
 })
 
 app.post("/playlist_add", urlencoder, (req,res)=>{
+    //add game to playlist
+    let game = req.body.game
+
+    res.render("playlist.hbs", {})
+})
+
+app.post("/playlist_edit", urlencoder, (req,res)=>{
     //add game to playlist
     let game = req.body.game
 

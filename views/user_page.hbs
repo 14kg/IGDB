@@ -26,20 +26,16 @@
       </div>
         <div class = "page">
             <div id  = "body" class = "nes-container is-rounded">
-                <b><p>Name:</p></b><p id= "name">John Doe</p>
-                <b><p>Address:</p></b><p id = "address">Louisiana</p>
-                <b><p>Date Registered: </p></b><p id ="date">2020</p>
-                <b><p>Last Active since:</p></b><p id = "activesince">5 days ago</p>
-                <b><p>Favorite Genres: </p></b><p id = "genre">Arcade</p>
+                {{username}}'s User Page
             </div>
             <div id = "footer" class = "nes-container is-rounded">
                 <h3>Recent Reviews</h3>
             </div>
             <div id = "playlists" class = "nes-container is-rounded">
               <div id = "playlist_s">
-                <a href="/playlist"><h3>Playlist 1</h3></a>
-                <a href="/playlist"><h3>Playlist 2</h3></a>
-                <a href="/playlist"><h3>Playlist 3</h3></a>
+                {{#each playlists}}
+                  <a href="/playlist"><h3>{{title}}</h3></a>
+                {{/each}}
               </div>
         <button id="addnew">Add New</button>
       <div id="makenew" class="modal">
