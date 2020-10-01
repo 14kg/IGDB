@@ -51,11 +51,14 @@
                   <tr>
                     <th><h3>Reviews</h3></th>
                     <th><h3>Comments</h3></th>
+                    <th><h3>Options</h3></th>
                   </tr>
                 {{#each reviews}}
                   <tr>
                     <td><a href="/review?id={{_id}}">{{title}}</a></td>
                     <td>{{comments.length}}</td>
+                    <td><a class="nes-btn" href="/review_edit?id={{_id}}">Edit</a></td>
+                    <td><a class="nes-btn" href="/review_del?id={{_id}}">Delete</a></td>
                   </tr>
                 {{/each}}
                 </table>
@@ -66,11 +69,14 @@
                   <tr>
                     <th><h3>Playlists</h3></th>
                     <th><h3>Description</h3></th>
+                    <th><h3>Options</h3></th>
                   </tr>
                 {{#each playlists}}
                   <tr>
                     <td><a href="/playlist?id={{_id}}">{{title}}</a></td>
                     <td>{{description}}</td>
+                    <td><a class="nes-btn" href="/playlist_edit?id={{_id}}">Edit</a></td>
+                    <td><a class="nes-btn" href="/playlist_del?id={{_id}}">Delete</a></td>
                   </tr>
                 {{/each}}
                 </table>
@@ -103,12 +109,18 @@
       </div> 
             </div>
             <div class = "panel nes-container is-rounded">
-              <h3>Comments</h3>
+
               <div id = "comment_s">
+                <table>
+                  <tr>
+                    <th><h3>Comments</h3></th>
+                    <th><h3>Options</h3></th>
+                  </tr>
                 {{#each comments}}
                   <tr>
                     <td><a href="/review?id={{review_id}}">{{comment}}</a></td>
-                    <td>{{description}}</td>
+                    <td><a class="nes-btn" href="/comment_edit?id={{_id}}">Edit</a></td>
+                    <td><a class="nes-btn" href="/comment_del?id={{_id}}">Delete</a></td>
                   </tr>
                 {{/each}}
                 </table>

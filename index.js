@@ -474,6 +474,41 @@ app.post("/comment", urlencoder, (req,res)=>{
     })
 })
 
+app.get("/comment_del", urlencoder, (req,res)=>{
+    //create a comment
+    Comment.findOne({
+        _id: req.query.id
+    }).then((doc)=>{
+        User.findOne({
+            _id: doc.user._id
+        }).then((doc)=>{
+            doc.comments.pull({_id: req.query.id})
+            doc.save()
+        }, (err)=>{
+            console.log(err)
+        })
+        Review.findOne({
+            _id: doc.review_id
+        }).then((doc)=>{
+            doc.comments.pull({_id: req.query.id})
+            doc.save()
+        }, (err)=>{
+            console.log(err)
+        })
+        Comment.deleteOne({
+            _id: req.query.id
+        }).then((doc)=>{
+            console.log("Deleted " + doc.n + " document/s.")
+            res.redirect("/user_page?uid="+req.session.user_id)
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
+    
+})
+
 app.post("/review", urlencoder, (req,res)=>{
     //create a review
     let title = req.body.title
@@ -516,6 +551,40 @@ app.post("/review", urlencoder, (req,res)=>{
     })
 })
 
+app.get("/review_del", urlencoder, (req,res)=>{
+    //create a comment
+    Review.findOne({
+        _id: req.query.id
+    }).then((doc)=>{
+        User.findOne({
+            _id: doc.user._id
+        }).then((doc)=>{
+            doc.reviews.pull({_id: req.query.id})
+            doc.save()
+        }, (err)=>{
+            console.log(err)
+        })
+        Game.findOne({
+            _id: doc.game_id
+        }).then((doc)=>{
+            doc.reviews.pull({_id: req.query.id})
+            doc.save()
+        }, (err)=>{
+            console.log(err)
+        })
+        Review.deleteOne({
+            _id: req.query.id
+        }).then((doc)=>{
+            console.log("Deleted " + doc.n + " document/s.")
+            res.redirect("/user_page?uid="+req.session.user_id)
+        }, (err)=>{
+            console.log(err)
+        })
+    }, (err)=>{
+        console.log(err)
+    })
+    
+})
 //===================
 //PLAYLIST OPERATIONS
 //===================
@@ -611,7 +680,21 @@ app.post("/playlist_add", urlencoder, (req,res)=>{
     })
 })
 
+app.post("/playlist_remove", urlencoder, (req,res)=>{
+    //add game to playlist
+    let game = req.body.game
+
+    res.render("playlist.hbs", {})
+})
+
 app.post("/playlist_edit", urlencoder, (req,res)=>{
+    //add game to playlist
+    let game = req.body.game
+
+    res.render("playlist.hbs", {})
+})
+
+app.post("/playlist_delete", urlencoder, (req,res)=>{
     //add game to playlist
     let game = req.body.game
 
